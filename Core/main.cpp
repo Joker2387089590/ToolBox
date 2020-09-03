@@ -1,12 +1,11 @@
 #include <QApplication>
-
-#include "widget.h"
+#include "Core.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	a.setQuitOnLastWindowClosed(false);
-	Widget w;
-	w.show();
+	Core c;
+	c.show();
 	return a.exec();
 }

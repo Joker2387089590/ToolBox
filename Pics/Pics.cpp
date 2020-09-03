@@ -1,12 +1,12 @@
-#include "widget.h"
-#include "ui_widget.h"
-#include "tabpage.h"
-
 #include <QEvent>
 #include <QMouseEvent>
 #include <QTimer>
 #include <QClipboard>
 #include <QDebug>
+
+#include "Pics.h"
+#include "ui_Pics.h"
+#include "tabpage.h"
 
 // LBC : Left Button Click
 // RBD : Right Button Double Click
@@ -20,9 +20,10 @@
 // |   other   | \\\ | MaxWindow | \\\\\\\\\\\ | Close | Move Window |
 // +-----------+-----+-----------+-------------+-------+-------------+
 
-Widget::Widget(QWidget *parent) :
-	QWidget(parent, Qt::FramelessWindowHint),
-	ui(new Ui::Widget), curpage(nullptr)
+Pics::Pics(QWidget *parent) :
+	QWidget(parent, !parent ? Qt::FramelessWindowHint : Qt::WindowFlags()),
+	ui(new Ui::Pics),
+	curpage(nullptr)
 {
 	ui->setupUi(this);
 	ui->widget->installEventFilter(this);
@@ -34,40 +35,46 @@ Widget::Widget(QWidget *parent) :
 	ui->label_pic->setMouseTracking(true);
 
 	connect(ui->tabWidget, &QTabWidget::currentChanged, [this]()
-	{
-		if((curpage = dynamic_cast<tabpage*>(ui->tabWidget->currentWidget())))
-			curpage->active();
-	});
+			{
+				if((curpage = dynamic_cast<tabpage*>(ui->tabWidget->currentWidget())))
+					curpage->active();
+			});
 	connect(ui->button_dir, &QPushButton::clicked, [this]()
-	{
-		if(curpage)
-		{
-			curpage->setpath(QApplication::clipboard()->text());
-			curpage->active();
-		}
-	});
+			{
+				if(curpage)
+				{
+					curpage->setpath(QApplication::clipboard()->text());
+					curpage->active();
+				}
+			});
 }
 
-void Widget::addTab(tabpage* page, const QString& title)
+void Pics::addTab(tabpage* page, const QString& title)
 {
 	page->w = this;
 	page->pixlabel = ui->label_pic;
 	ui->tabWidget->addTab(page, title);
 }
 
-bool Widget::eventFilter(QObject* obj, QEvent* event)
+bool Pics::eventFilter(QObject* obj, QEvent* event)
 {
 	using namespace Qt;
-	auto mouseevent = dynamic_cast<QMouseEvent*>(event);
+
+	auto mouseevent = static_cast<QMouseEvent*>(event);
 	static bool picmode = false;
+
 	switch(auto et = event->type())
 	{
 	case QEvent::MouseButtonPress:
+		// save the position where any mouse button was pressed
 		oldmousepos = mouseevent->globalPos();
 		oldwidgetpos = this->pos();
-		if(mouseevent->button() == RightButton && obj == ui->label_pic && curpage)
+
+		// right press on picture
+		if(mouseevent->button() == RightButton &&
+		   obj == ui->label_pic && curpage)
 		{
-			if((picmode = !picmode))
+			if(!picmode)
 			{
 				this->setCursor(CrossCursor);
 				curmousepos = oldmousepos;
@@ -77,6 +84,7 @@ bool Widget::eventFilter(QObject* obj, QEvent* event)
 				this->setCursor(ArrowCursor);
 				emit curpage->setpic();
 			}
+			picmode = !picmode;
 		}
 		[[fallthrough]];
 	case QEvent::MouseMove:
@@ -111,21 +119,23 @@ bool Widget::eventFilter(QObject* obj, QEvent* event)
 	return QWidget::eventFilter(obj, event);
 }
 
-void Widget::pathText(tabpage* page, const QString& path)
+void Pics::pathText(tabpage* page, const QString& path)
 {
 	if(page == curpage) ui->label_curdir->setText(path);
 }
 
-void Widget::watchPic()
+void Pics::watchPic()
 {
-	int pw = curpage->pix.width(),
-		ph = curpage->pix.height(),
-		ww = ui->widget->width(),
-		wh = ui->widget->height();
+	using std::max, std::min;
+
+	int pw = curpage->pix.width();
+	int ph = curpage->pix.height();
+	int ww = ui->widget->width();
+	int wh = ui->widget->height();
 	auto wc = ui->widget->mapToGlobal(ui->widget->rect().center());
 
-	// setup size of the window to cut pic
-	QSize s(pw < ww ? pw : ww, ph < wh ? ph : wh);
+	// size of the window to cut pic
+	QSize s(min(pw, ww), min(ph, wh));
 
 	auto addpos = QCursor::pos() - oldmousepos;
 	curmousepos += addpos;			// current mouse pos if not lock
@@ -138,19 +148,19 @@ void Widget::watchPic()
 	auto distance = picpos - wc;
 
 	// transform the distance to pic coordinate
-	auto rate = (pw * wh) > (ph * ww) ? double(pw) / ww : double(ph) / wh;
+	auto rate = (pw * wh) > (ph * ww) ? (double(pw) / ww) : (double(ph) / wh);
 	distance *= rate;
 
 	// limit the distance to make the window totally locate in the pic
-	int wallow = (pw - s.width()) / 2,
-		hallow = (ph - s.height()) / 2;
-	if(distance.x() < -wallow) distance.setX(-wallow);
-	if(distance.x() > wallow) distance.setX(wallow);
-	if(distance.y() < -hallow) distance.setY(-hallow);
-	if(distance.y() > hallow) distance.setY(hallow);
+	int wallow = (pw - s.width()) / 2;
+	int hallow = (ph - s.height()) / 2;
+	distance.setX(max(distance.x(), -wallow));
+	distance.setX(min(distance.x(), wallow));
+	distance.setY(max(distance.y(), -hallow));
+	distance.setY(min(distance.y(), hallow));
 
 	// now let picpos be pos of the window's topleft point
-	picpos = QPoint(wallow, hallow) + distance;
+	picpos = distance + QPoint(wallow, hallow);
 
 	// cut the pic in rect(picpos, s)
 	ui->label_pic->setPixmap(curpage->pix.copy(QRect(picpos, s)));
@@ -159,4 +169,4 @@ void Widget::watchPic()
 	curmousepos = ui->widget->mapToGlobal(wc + distance / rate);
 }
 
-Widget::~Widget() { delete ui; }
+Pics::~Pics() { delete ui; }

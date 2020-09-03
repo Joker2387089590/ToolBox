@@ -1,4 +1,4 @@
-#include "widget.h"
+#include "Pics.h"
 #include "pixiv.h"
 #include "hacg.h"
 #include "cgsort.h"
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	qunsetenv("QT_SCALE_FACTOR_ROUNDING_POLICY");
 	qunsetenv("QT_SCREEN_SCALE_FACTORS");
 	QApplication a(argc, argv);
-	Widget w; w.show();
+	Pics w; w.show();
 	w.addTab(new pixiv, "Pixiv");
 	w.addTab(new hacg, "神社壁纸");
 	w.addTab(new cgsort, "CG筛选");

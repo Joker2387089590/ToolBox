@@ -2,41 +2,61 @@ QT += core gui widgets
 
 CONFIG += c++17
 
+TARGET = ToolBox
+
 DEFINES += \
 	QT_DEPRECATED_WARNINGS \
 	QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
 SOURCES += \
+	Core.cpp \
 	Tray.cpp \
-	main.cpp \
-	widget.cpp
+	main.cpp
 
 HEADERS += \
+	Core.h \
 	Tray.h \
-	widget.h
+	UiCore.h
 
 FORMS += \
-	widget.ui
+	Core.ui
 
 RESOURCES += \
 	ico.qrc
 
-win32:CONFIG(release, debug|release): {
-	LIBS += -L$$OUT_PWD/../Account/release/ -lAccount
+# Include and dependence
+include($$PWD/../Json/Json.pri)
+INCLUDEPATH += \
+	$$PWD/../Account \
+	$$PWD/../Pics
+
+DEPENDPATH += \
+	$$PWD/../Account \
+	$$PWD/../Pics
+
+# Conditional compile
+win32: CONFIG(debug, debug|release): {
+	LIBS += \
+		-L$$OUT_PWD/../Account/debug/ -lAccount \
+		-L$$OUT_PWD/../Pics/debug/ -lPics
+}
+else: win32: CONFIG(release, debug|release): {
+	LIBS += \
+		-L$$OUT_PWD/../Account/release/ -lAccount \
+		-L$$OUT_PWD/../Pics/release/ -lPics
 	CONFIG += windeployqt
 }
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Account/debug/ -lAccount
-else:unix: LIBS += -L$$OUT_PWD/../Account/ -lAccount
-
-include ($$PWD/../Json/Json.pri)
-INCLUDEPATH += $$PWD/../Account
-DEPENDPATH += $$PWD/../Account
+else: unix: {
+	LIBS += \
+		-L$$OUT_PWD/../Account/ -lAccount \
+		-L$$OUT_PWD/../Pics/ -lPics
+}
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32-msvc*:{
+win32-msvc*: {
 	QMAKE_CFLAGS *= /utf-8
 	QMAKE_CXXFLAGS *= /utf-8
 }

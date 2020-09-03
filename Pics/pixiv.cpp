@@ -4,7 +4,7 @@
 #define setconnect(button) connect(ui->button, &QPushButton::clicked, this, &pixiv::button)
 static constexpr double rate = 1920.0 / 1080.0 / 1.3;
 
-pixiv::pixiv(Widget* ins) :
+pixiv::pixiv(Pics* ins) :
 	tabpage(ins), ui(new Ui::pixiv)
 {
 	ui->setupUi(this);

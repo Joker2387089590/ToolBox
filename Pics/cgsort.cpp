@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-cgsort::cgsort(Widget *ins) :
+cgsort::cgsort(Pics *ins) :
 	  tabpage(ins),
 	  ui(new Ui::cgsort), tar(path)
 {

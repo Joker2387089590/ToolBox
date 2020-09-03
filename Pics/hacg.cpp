@@ -2,7 +2,7 @@
 #include "ui_hacg.h"
 #include <QRegularExpression>
 
-hacg::hacg(Widget* ins) : tabpage(ins), ui(new Ui::hacg)
+hacg::hacg(Pics* ins) : tabpage(ins), ui(new Ui::hacg)
 {
 	ui->setupUi(static_cast<QWidget*>(this));
 	connect(ui->rename, &QPushButton::clicked, this, &hacg::next);

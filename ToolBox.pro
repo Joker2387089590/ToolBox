@@ -5,4 +5,6 @@ SUBDIRS += \
 	Account \
 	Pics
 
-Core.depends = Account Pics
+include($$PWD/Json/Json.pri)
+
+Core.depends += Account Pics

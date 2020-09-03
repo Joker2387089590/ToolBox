@@ -10,7 +10,7 @@ class hacg : public tabpage
 	Q_OBJECT
 
 public:
-	explicit hacg(Widget* ins = nullptr);
+	explicit hacg(Pics* ins = nullptr);
 	~hacg() override;
 	virtual void next() override;
 	virtual void copy() override;

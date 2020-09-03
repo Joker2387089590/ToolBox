@@ -12,7 +12,7 @@ class cgsort : public tabpage
 	Q_OBJECT
 
 public:
-	explicit cgsort(Widget *ins = nullptr);
+	explicit cgsort(Pics *ins = nullptr);
 	virtual ~cgsort() override;
 	virtual void next() override;
 	virtual void copy() override;

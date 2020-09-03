@@ -7,14 +7,15 @@
 #include <QFileInfo>
 #include <QTabWidget>
 
-#include "widget.h"
+#include "PicsGlobal.h"
+#include "Pics.h"
 
-class tabpage : public QWidget
+class PICS_EXPORT tabpage : public QWidget
 {
 	Q_OBJECT
 
 public:
-	explicit tabpage(Widget* ins = nullptr);
+	explicit tabpage(Pics* ins = nullptr);
 	void setpath(const QString& newpath);
 	virtual void next();
 	virtual void copy() = 0;
@@ -25,7 +26,7 @@ signals:
 	void pathChanged();
 
 protected:
-	friend class Widget;
+	friend class Pics;
 
 	// file controller
 	QString path;
@@ -45,7 +46,7 @@ protected:
 	QPixmap pix;
 
 	// UI controller
-	Widget* w;
+	Pics* w;
 	QLabel*	pixlabel {nullptr};
 };
 

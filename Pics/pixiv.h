@@ -11,7 +11,7 @@ class pixiv : public tabpage
 	Q_OBJECT
 
 public:
-	explicit pixiv(Widget* ins = nullptr);
+	explicit pixiv(Pics* ins = nullptr);
 	virtual ~pixiv() override;
 
 	void change();

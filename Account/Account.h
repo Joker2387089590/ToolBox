@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QSharedPointer>
 #include <Interface.hpp>
-#include "Account_global.h"
+#include "AccountGlobal.h"
 
 namespace Ui { class Account; }
 

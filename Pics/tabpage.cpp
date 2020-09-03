@@ -4,7 +4,7 @@
 #include <QApplication>
 #include <QtConcurrent/QtConcurrentRun>
 
-tabpage::tabpage(Widget* ins)
+tabpage::tabpage(Pics* ins)
 	: QWidget(nullptr), w(ins), pixlabel(nullptr)
 {
 	ir.setDecideFormatFromContent(true);

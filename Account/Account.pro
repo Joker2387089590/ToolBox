@@ -10,8 +10,8 @@ DEFINES += \
 	QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
 HEADERS += \
-	Account_global.h \
 	Account.h \
+	AccountGlobal.h \
 	Item.h \
 
 SOURCES += \

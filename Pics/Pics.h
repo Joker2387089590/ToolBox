@@ -1,31 +1,39 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef PICS_H
+#define PICS_H
 
 #include <QWidget>
+#include "PicsGlobal.h"
 
-namespace Ui { class Widget; }
+namespace Ui { class Pics; }
+
 class tabpage;
-class Widget : public QWidget
+
+class PICS_EXPORT Pics : public QWidget
 {
 	Q_OBJECT
 
 public:
-	explicit Widget(QWidget *parent = nullptr);
+	explicit Pics(QWidget* parent = nullptr);
+
 	void addTab(tabpage* page, const QString& title = QString());
 	void pathText(tabpage* page, const QString& path);
-	~Widget() override;
+	~Pics() override;
 
 protected:
 	virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
-	Ui::Widget* ui;
-	QPoint oldmousepos, oldwidgetpos, curmousepos;
-	void watchPic();
+	Ui::Pics* ui;
 	tabpage* curpage;
+
+	QPoint oldmousepos;
+	QPoint oldwidgetpos;
+	QPoint curmousepos;
+
+	void watchPic();
 };
 
-#endif // WIDGET_H
+#endif // PICS_H
 
 
 

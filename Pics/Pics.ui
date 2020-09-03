@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Widget</class>
- <widget class="QWidget" name="Widget">
+ <class>Pics</class>
+ <widget class="QWidget" name="Pics">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -20,6 +20,18 @@
    <string>Pic</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="1" column="1">
     <widget class="QPushButton" name="button_dir">
      <property name="sizePolicy">
@@ -74,11 +86,6 @@
       </property>
       <property name="autoFillBackground">
        <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border-width: 1px;
-border-style: solid;
-border-color: rgb(255, 128, 128);</string>
       </property>
       <property name="text">
        <string>label_pic</string>

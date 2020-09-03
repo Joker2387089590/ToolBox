@@ -10,25 +10,26 @@ DEFINES += \
 	QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
 HEADERS += \
+	Pics.h \
+	PicsGlobal.h \
 	cgsort.h \
 	hacg.h \
 	pixiv.h \
-	tabpage.h \
-	widget.h
+	tabpage.h
 
 SOURCES += \
+	Pics.cpp \
 	cgsort.cpp \
 	hacg.cpp \
 	main.cpp \
 	pixiv.cpp \
-	tabpage.cpp \
-	widget.cpp
+	tabpage.cpp
 
 FORMS += \
+	Pics.ui \
 	cgsort.ui \
 	hacg.ui \
-	pixiv.ui \
-	widget.ui
+	pixiv.ui
 
 unix {
 	target.path = /usr/lib
@@ -39,9 +40,3 @@ win32-msvc*:{
 	QMAKE_CFLAGS *= /utf-8
 	QMAKE_CXXFLAGS *= /utf-8
 }
-
-CONFIG(debug, debug|release){
-} else {
-	DEFINES += QT_NO_DEBUG_OUTPUT
-}
-
