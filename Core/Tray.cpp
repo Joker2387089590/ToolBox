@@ -12,6 +12,8 @@ Tray::Tray(QWidget* parent) :
 	menu->addSeparator();
 }
 
+QMenu* Tray::getMenu() const { return menu; }
+
 QAction* Tray::makeAction(const QString& text)
 {
 	auto r = new QAction(text, menu);
@@ -19,7 +21,14 @@ QAction* Tray::makeAction(const QString& text)
 	return r;
 }
 
-QMenu* Tray::getMenu() const
+QAction* Tray::action(const QString& text) const
 {
-	return menu;
+	for(auto ai : menu->actions())
+		if(ai->text() == text) return ai;
+	return nullptr;
+}
+
+void Tray::removeAction(const QString& text)
+{
+	if(auto a = action(text)) menu->removeAction(a);
 }

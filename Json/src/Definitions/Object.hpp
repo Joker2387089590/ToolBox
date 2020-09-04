@@ -102,31 +102,8 @@ namespace Json::Definition
 		const ObjectPoint obj;
 		std::tuple<Args...> args;
 
-		// 1. An interface to expand args into the arguments list of f
-		template<typename Fn, typename... As>
-		inline void proxy(Fn f, const std::tuple<As...>& as)
-		{
-			// 2.
-			// Get tuple's length sizeof...(As),
-			// and create a IndexPack<0, 1, ..., N-1>
-			proxyHelper(f, makeIndexPack<sizeof...(As)>(), as);
-		}
-
 		template<size_t ...>
 		struct IndexPack{};
-
-		// 8. Trait <i...> from IndexPack<i...>
-		template<typename F, size_t... i, typename T>
-		inline void proxyHelper(F f, IndexPack<i...>, T&& as)
-		{
-			// 9.
-			// At last, use std::get<i>(tuple),
-			// to put every elements in args to f
-			// The symbol "..." means, for every i in <typename... i>,
-			// expr(i)... == expr(i[0]), expr(i[1]), ..., expr(i[N-1])
-			// (just add a "," between to two template args)
-			f(std::get<i>(as)...); // = f(as[0], as[1], ..., as[N-1])
-		}
 
 		// 4. At beginning, S... == void
 		template<size_t N, size_t ...S>
@@ -148,6 +125,29 @@ namespace Json::Definition
 		template<size_t N> using makeIndexPack =
 			// 3. Compiler is trying to instantiate IndexProxy
 			typename IndexProxy<N>::type;
+
+		// 1. An interface to expand args into the arguments list of f
+		template<typename Fn, typename... As>
+		inline void proxy(Fn f, const std::tuple<As...>& as)
+		{
+			// 2.
+			// Get tuple's length sizeof...(As),
+			// and create a IndexPack<0, 1, ..., N-1>
+			proxyHelper(f, makeIndexPack<sizeof...(As)>(), as);
+		}
+
+		// 8. Trait <i...> from IndexPack<i...>
+		template<typename F, size_t... i, typename T>
+		inline void proxyHelper(F f, IndexPack<i...>, T&& as)
+		{
+			// 9.
+			// At last, use std::get<i>(tuple),
+			// to put every elements in args to f
+			// The symbol "..." means, for every i in <typename... i>,
+			// expr(i)... == expr(i[0]), expr(i[1]), ..., expr(i[N-1])
+			// (just add a "," between to two template args)
+			f(std::get<i>(as)...); // = f(as[0], as[1], ..., as[N-1])
+		}
 
 		/* 10. Type derivation:
 		 *

@@ -10,8 +10,11 @@ class Tray : public QSystemTrayIcon
 
 public:
 	explicit Tray(QWidget *parent = nullptr);
-	QAction* makeAction(const QString& text);
 	QMenu* getMenu() const;
+
+	QAction* makeAction(const QString& text);
+	QAction* action(const QString& text) const;
+	void removeAction(const QString& text);
 
 private:
 	QMenu* menu;

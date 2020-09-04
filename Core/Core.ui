@@ -14,13 +14,28 @@
    <string>Widget</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="ico.qrc">
+   <iconset>
     <normaloff>:/ToolBox.png</normaloff>:/ToolBox.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0" rowspan="2">
     <widget class="QWidget" name="side_bar" native="true">
      <property name="sizePolicy">
@@ -130,8 +145,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="ico.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

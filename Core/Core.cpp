@@ -37,11 +37,12 @@ void Core::initSideBar()
 
 void Core::initTrayAction()
 {
-	auto open = tray_icon->makeAction("Open");
-	connect(open, &QAction::triggered, this, &Core::show);
+	connect(tray_icon->makeAction("Open"), &QAction::triggered,
+			this, &Core::show);
 
-	auto exit = tray_icon->makeAction("Exit");
-	connect(exit, &QAction::triggered, this, &Core::exitApp, Qt::QueuedConnection);
+	connect(tray_icon->makeAction("Exit"), &QAction::triggered,
+			this, &Core::exitApp, Qt::QueuedConnection);
+
 	connect(tray_icon, &Tray::activated, this, &Core::activeTray);
 }
 

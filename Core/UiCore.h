@@ -1,12 +1,10 @@
 #ifndef UI_CORE_H
 #define UI_CORE_H
 
-#include <QWidget>
-#include <QIcon>
-#include <QGridLayout>
 #include <QStackedWidget>
-#include <QVBoxLayout>
 #include <QToolButton>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -23,17 +21,21 @@ public:
 		using SP = QSizePolicy::Policy;
 
 		w->setWindowTitle("Tool Box");
+		w->resize(600, 400);
 		w->setWindowIcon(QIcon(":/ToolBox.png"));
 		{
 			auto layout = new QGridLayout(w);
+			layout->setSpacing(0);
+			layout->setContentsMargins(0, 0, 0, 0);
+			QSizePolicy sp(SP::Expanding, SP::Preferred);
 
 			auto side_bar = new QWidget(w);
+			side_bar->setContentsMargins(0, 0, 0, 0);
 			side_bar->setSizePolicy(SP::Fixed, SP::Preferred);
 			{
 				auto layout = new QVBoxLayout(side_bar);
 				layout->setSpacing(0);
 				layout->setContentsMargins(0, 0, 0, 0);
-				QSizePolicy sp(SP::Expanding, SP::Preferred);
 
 				caller_account = new QToolButton(side_bar);
 				caller_account->setSizePolicy(sp);
@@ -49,16 +51,9 @@ public:
 			layout->addWidget(side_bar, 0, 0, 1, 1);
 
 			work_panel = new QStackedWidget(w);
+			work_panel->setSizePolicy(sp);
 			layout->addWidget(work_panel, 0, 1, 1, 1);
 		}
-	}
-
-	void appendWorkPanel(QWidget* w)
-	{
-		if(!w) return;
-		work_panel->addWidget(w);
-
-		work_panel->setCurrentWidget(w);
 	}
 };
 
