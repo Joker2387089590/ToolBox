@@ -2,11 +2,10 @@
 #define PICS_H
 
 #include <QWidget>
-#include "PicsGlobal.h"
+#include "../PicsGlobal.h"
 
 namespace Ui { class Pics; }
-
-class tabpage;
+class TabPage;
 
 class PICS_EXPORT Pics : public QWidget
 {
@@ -15,8 +14,8 @@ class PICS_EXPORT Pics : public QWidget
 public:
 	explicit Pics(QWidget* parent = nullptr);
 
-	void addTab(tabpage* page, const QString& title = QString());
-	void pathText(tabpage* page, const QString& path);
+	void addTab(TabPage* page, const QString& title = QString());
+	void pathText(TabPage* page, const QString& path);
 	~Pics() override;
 
 protected:
@@ -24,11 +23,11 @@ protected:
 
 private:
 	Ui::Pics* ui;
-	tabpage* curpage;
+	TabPage* curpage;
 
-	QPoint oldmousepos;
-	QPoint oldwidgetpos;
-	QPoint curmousepos;
+	QPoint old_mouse_pos;
+	QPoint old_widget_pos;
+	QPoint cur_mouse_pos;
 
 	void watchPic();
 };

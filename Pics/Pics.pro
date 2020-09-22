@@ -9,27 +9,11 @@ DEFINES += \
 	QT_DEPRECATED_WARNINGS \
 	QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
-HEADERS += \
-	Pics.h \
-	PicsGlobal.h \
-	cgsort.h \
-	hacg.h \
-	pixiv.h \
-	tabpage.h
+HEADERS += PicsGlobal.h
 
-SOURCES += \
-	Pics.cpp \
-	cgsort.cpp \
-	hacg.cpp \
-	main.cpp \
-	pixiv.cpp \
-	tabpage.cpp
-
-FORMS += \
-	Pics.ui \
-	cgsort.ui \
-	hacg.ui \
-	pixiv.ui
+include($$PWD/../TabPage.pri)
+include($$PWD/Pics/Pics.pri)
+include($$PWD/PicsWidget/PicsWidget.pri)
 
 unix {
 	target.path = /usr/lib

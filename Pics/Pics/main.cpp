@@ -1,7 +1,7 @@
 #include "Pics.h"
-#include "pixiv.h"
-#include "hacg.h"
-#include "cgsort.h"
+#include "../Pixiv/Pixiv.h"
+#include "../HACG/HACG.h"
+#include "../CGSort/CGSort.h"
 
 #include <QApplication>
 
@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 	qunsetenv("QT_SCREEN_SCALE_FACTORS");
 	QApplication a(argc, argv);
 	Pics w; w.show();
-	w.addTab(new pixiv, "Pixiv");
-	w.addTab(new hacg, "神社壁纸");
-	w.addTab(new cgsort, "CG筛选");
+	w.addTab(new Pixiv, "Pixiv");
+	w.addTab(new HACG, "神社壁纸");
+	w.addTab(new CGSort, "CG筛选");
 	return QApplication::exec();
 }

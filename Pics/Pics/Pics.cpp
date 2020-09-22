@@ -6,7 +6,7 @@
 
 #include "Pics.h"
 #include "ui_Pics.h"
-#include "tabpage.h"
+#include "../TabPage/TabPage.h"
 
 // LBC : Left Button Click
 // RBD : Right Button Double Click
@@ -36,7 +36,7 @@ Pics::Pics(QWidget *parent) :
 
 	connect(ui->tabWidget, &QTabWidget::currentChanged, [this]()
 			{
-				if((curpage = dynamic_cast<tabpage*>(ui->tabWidget->currentWidget())))
+				if((curpage = dynamic_cast<TabPage*>(ui->tabWidget->currentWidget())))
 					curpage->active();
 			});
 	connect(ui->button_dir, &QPushButton::clicked, [this]()
@@ -49,7 +49,7 @@ Pics::Pics(QWidget *parent) :
 			});
 }
 
-void Pics::addTab(tabpage* page, const QString& title)
+void Pics::addTab(TabPage* page, const QString& title)
 {
 	page->w = this;
 	page->pixlabel = ui->label_pic;
@@ -60,24 +60,24 @@ bool Pics::eventFilter(QObject* obj, QEvent* event)
 {
 	using namespace Qt;
 
-	auto mouseevent = static_cast<QMouseEvent*>(event);
+	auto mouse_event = static_cast<QMouseEvent*>(event);
 	static bool picmode = false;
 
 	switch(auto et = event->type())
 	{
 	case QEvent::MouseButtonPress:
 		// save the position where any mouse button was pressed
-		oldmousepos = mouseevent->globalPos();
-		oldwidgetpos = this->pos();
+		old_mouse_pos = mouse_event->globalPos();
+		old_widget_pos = this->pos();
 
 		// right press on picture
-		if(mouseevent->button() == RightButton &&
+		if(mouse_event->button() == RightButton &&
 		   obj == ui->label_pic && curpage)
 		{
 			if(!picmode)
 			{
 				this->setCursor(CrossCursor);
-				curmousepos = oldmousepos;
+				cur_mouse_pos = old_mouse_pos;
 			}
 			else
 			{
@@ -88,24 +88,24 @@ bool Pics::eventFilter(QObject* obj, QEvent* event)
 		}
 		[[fallthrough]];
 	case QEvent::MouseMove:
-		if(picmode && curpage && !curpage->pix.isNull())
+		if(picmode && curpage && !curpage->pic.isNull())
 		{
 			watchPic();
 			if(et == QEvent::MouseButtonPress) return true;
 			break;
 		}
-		if(mouseevent->buttons().testFlag(LeftButton)
+		if(mouse_event->buttons().testFlag(LeftButton)
 		   && !windowState().testFlag(WindowMaximized))
-			this->move(oldwidgetpos + QCursor::pos() - oldmousepos);
+			this->move(old_widget_pos + QCursor::pos() - old_mouse_pos);
 		break;
 	case QEvent::MouseButtonDblClick:
-		if(!picmode && mouseevent->button() == LeftButton)
+		if(!picmode && mouse_event->button() == LeftButton)
 		{
 			setWindowState(windowState() == WindowNoState ?
 							   WindowMaximized : WindowNoState);
 			return true;
 		}
-		if(mouseevent->button() == RightButton) this->close();
+		if(mouse_event->button() == RightButton) this->close();
 		break;
 	case QEvent::Resize:
 		if (curpage)
@@ -114,12 +114,13 @@ bool Pics::eventFilter(QObject* obj, QEvent* event)
 			emit curpage->setpic();
 		}
 		break;
-	default: break;
+	default:
+		break;
 	}
 	return QWidget::eventFilter(obj, event);
 }
 
-void Pics::pathText(tabpage* page, const QString& path)
+void Pics::pathText(TabPage* page, const QString& path)
 {
 	if(page == curpage) ui->label_curdir->setText(path);
 }
@@ -128,8 +129,8 @@ void Pics::watchPic()
 {
 	using std::max, std::min;
 
-	int pw = curpage->pix.width();
-	int ph = curpage->pix.height();
+	int pw = curpage->pic.width();
+	int ph = curpage->pic.height();
 	int ww = ui->widget->width();
 	int wh = ui->widget->height();
 	auto wc = ui->widget->mapToGlobal(ui->widget->rect().center());
@@ -137,12 +138,12 @@ void Pics::watchPic()
 	// size of the window to cut pic
 	QSize s(min(pw, ww), min(ph, wh));
 
-	auto addpos = QCursor::pos() - oldmousepos;
-	curmousepos += addpos;			// current mouse pos if not lock
-	QCursor::setPos(oldmousepos);	// lock the mouse at oldmousepos
+	auto addpos = QCursor::pos() - old_mouse_pos;
+	cur_mouse_pos += addpos;			// current mouse pos if not lock
+	QCursor::setPos(old_mouse_pos);	// lock the mouse at oldmousepos
 
 	// map current pos to widget coordinate
-	auto picpos = ui->widget->mapFromGlobal(curmousepos);
+	auto picpos = ui->widget->mapFromGlobal(cur_mouse_pos);
 
 	// get the distance from pos to widget's center
 	auto distance = picpos - wc;
@@ -163,10 +164,10 @@ void Pics::watchPic()
 	picpos = distance + QPoint(wallow, hallow);
 
 	// cut the pic in rect(picpos, s)
-	ui->label_pic->setPixmap(curpage->pix.copy(QRect(picpos, s)));
+	ui->label_pic->setPixmap(curpage->pic.copy(QRect(picpos, s)));
 
 	// reverse the operation upon to move curmousepos to where it should be
-	curmousepos = ui->widget->mapToGlobal(wc + distance / rate);
+	cur_mouse_pos = ui->widget->mapToGlobal(wc + distance / rate);
 }
 
 Pics::~Pics() { delete ui; }
