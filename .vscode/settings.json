@@ -1,0 +1,5 @@
+{
+    "cmake.configureArgs": [
+        "-DCMAKE_INSTALL_PREFIX=C:/Joker/Programma/Qt/5.15.2/msvc2019_64"
+    ]
+}

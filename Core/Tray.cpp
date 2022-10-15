@@ -1,34 +1,67 @@
 #include <QTimer>
+#include <QApplication>
+#include <QShowEvent>
+#include <QCloseEvent>
+#include <QSystemTrayIcon>
 #include "Tray.h"
+namespace ToolBox::Cores
+{
+class TrayPrivate
+{
+public:
+	void activeTray(QSystemTrayIcon::ActivationReason r);
+
+public:
+	Tray* q;
+	QSystemTrayIcon* icon;
+	bool remain{false};
+};
 
 Tray::Tray(QWidget* parent) :
-	QSystemTrayIcon(parent),
-	menu(new QMenu(parent))
+	QMenu(parent),
+	d(new TrayPrivate{this, new QSystemTrayIcon(this)})
 {
-	setIcon(QIcon(":/ToolBox.png"));
-	setToolTip("ToolBox");
-	setContextMenu(menu);
-	QTimer::singleShot(0, this, &Tray::show);
-	menu->addSeparator();
+	// qApp->setQuitOnLastWindowClosed(false);
+	d->icon->setIcon(QIcon(":/ToolBox.png"));
+	d->icon->setToolTip("ToolBox");
+	d->icon->setContextMenu(this);
+	addSeparator();
+	QTimer::singleShot(0, d->icon, &QSystemTrayIcon::show);
 }
 
-QMenu* Tray::getMenu() const { return menu; }
+Tray::~Tray() { delete d; }
 
-QAction* Tray::makeAction(const QString& text)
+bool Tray::isRemainWhenShow() const
 {
-	auto r = new QAction(text, menu);
-	menu->addAction(r);
-	return r;
+	return d->remain;
 }
 
-QAction* Tray::action(const QString& text) const
+void Tray::setRemainWhenShow(bool value)
 {
-	for(auto ai : menu->actions())
-		if(ai->text() == text) return ai;
-	return nullptr;
+	d->remain = value;
+	emit remainWhenShowChanged(value);
 }
 
-void Tray::removeAction(const QString& text)
+void Tray::add(const QString& text, const std::function<void(QAction*)>& init)
 {
-	if(auto a = action(text)) menu->removeAction(a);
+	init(this->addAction(text));
+}
+
+void TrayPrivate::activeTray(QSystemTrayIcon::ActivationReason r)
+{
+	switch (r)
+	{
+	case QSystemTrayIcon::Trigger: // Click
+	case QSystemTrayIcon::DoubleClick:
+		emit q->actived();
+		break;
+
+	case QSystemTrayIcon::Context: // Right Click
+		q->show();
+		break;
+
+	default:
+		break;
+	}
+}
 }

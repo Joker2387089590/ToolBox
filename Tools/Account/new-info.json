@@ -1,0 +1,127 @@
+{
+    "${Name}${ForOne},": [
+        {
+            "tag": "Unity",
+            "account": "${email}"
+        },
+        {
+            "tag": "NGA",
+            "account": "${email}",
+            "user-name": "${Name}_nga"
+        },
+        {
+			"tag": "CloudIPLC",
+			"account": "${gmail}"
+        },
+        {
+            "tag": "Cloudflare",
+            "account": "${gmail}"
+        },
+        {
+            "tag": "nic.ua",
+            "account": "${gmail}"
+        }
+    ],
+    "${Name}@{tag}@!${ForOne}": [
+		{
+			"tag": "keylol",
+            "tag-name": "其乐",
+			"account": "${email}",
+            "user name": "${Name}_keylol"
+		},
+        {
+            "tag": "Github",
+            "account": "${email}"
+        }
+    ],
+    "${Name}@${tag}@!": [
+        {
+            "tag": "MEGA",
+            "account": "${email}"
+        },
+        {
+            "tag": "TS2",
+            "tag-name": "天使二次元",
+            "account": "${Name}TS2",
+            "email": "${email}"
+        }
+    ],
+    "${Default},": [
+        {
+            "tag": "Gmail2",
+            "account": "${name}${code}.2@gmail.com"
+        },
+        {
+            "tag": "Steam",
+            "account": "${name}_steam11"
+        },
+        {
+            "tag": "EA",
+            "account": "${email}",
+			"code-old": [
+				83063947, 21473599, 74762760, 
+                90567940, 26482525, 64910458
+			]
+        },
+        {
+			"tag": "Twitter",
+			"account": "${email}",
+			"user-name": "${Name}_Twee"
+        }
+    ],
+    "${Default}!": [
+        {
+            "tag": "Paypal",
+            "account": "${email}"
+        },
+        {
+            "tag": "Gmail",
+            "account": "${gmail}"
+        }
+    ],
+    "${default-old}": [
+        {
+			"tag": "Telegram",
+			"account": "+1 626 935 9587"
+		},
+        {
+			"tag": "全国事业单位公开招聘系统",
+			"account": "${Name}${code}",
+			"密码提示问题": "default",
+			"密码提示答案": "default"
+		},
+        {
+            "tag": "Outlook",
+            "account": "${name}${code}@.com"
+        }
+    ],
+    "${default},": [
+        {
+			"tag": "Tencent cloud",
+			"account": "${gmail}"
+        }
+    ],
+    "${Default-old}": [
+		{
+			"tag": "Apex",
+			"account": "${Name}_3576_${Name}"
+		},
+		{
+			"tag": "Qt",
+			"account": "${email}"
+		},
+        {
+			"tag": "Oracle",
+			"account": "${email}"
+        }
+    ],
+    "${Default,-old}": [
+        {
+			"tag": "Gmail-GoogleVoice",
+			"account": "Bcgsjnsysuxvysbxyaxvhsz@gmail.com",
+			"phone number": "+1 (626) 935-9587",
+			"location": "California",
+			"post code": "CA"
+		}
+    ]
+}

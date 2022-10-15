@@ -1,54 +1,45 @@
-#ifndef CORE_H
-#define CORE_H
-
-#include <QShowEvent>
-#include <QCloseEvent>
-#include <type_traits>
-
-#include <Account.h>
-#include <Pics.h>
+#pragma once
+#include <QQmlEngine>
+#include <QQmlApplicationEngine>
 #include "Tray.h"
+#include "UiData.h"
 
-namespace Ui { class Core; }
+#include "Tools/Account/Account.h"
+#include "Tools/ExeIndex/ExeIndex.h"
 
-class Core : public QWidget
+extern int main(int, char*[]);
+
+namespace ToolBox::Cores
 {
-	Q_OBJECT
+class Core : public QObject
+{
+    Q_OBJECT
+private:
+	friend int ::main(int, char*[]);
+    explicit Core();
+    ~Core();
 
 public:
-	Core(QWidget *parent = nullptr);
-	~Core();
-
-	bool isTrayRemainWhenShow() const;
-	void setTrayRemainWhenShow(bool value);
-	Tray* tray();
+	void addTool(QQmlComponent* tool);
 
 signals:
-	void aboutToQuit();
-
-protected:
-	void showEvent(QShowEvent *event) override;
-	void closeEvent(QCloseEvent *event) override;
+    void show();
+	void started(QQmlContext* root, QQmlEngine* engine);
 
 private:
-	Ui::Core* ui;
+	void addDefaultTrayAction();
+	void setupTools();
+	void initTranslations();
+	void setupQmlEngine();
 
-	Account* account{nullptr};
-	Pics* pics{nullptr};
-	void initSideBar();
+private:
+	Tray* tray;
+	UiData* ui;
+	QObject* root;
+	QQmlApplicationEngine* engine;
 
-	template<typename W,
-			 std::enable_if_t<std::is_convertible_v<W*, QWidget*>, int> = 0>
-	void changeWorkPanel(W*& w);
-
-	void activeAccount();
-
-	Tray* tray_icon;
-	bool tray_remain_when_show{false};
-	void initTrayAction();
-	void activeTray(QSystemTrayIcon::ActivationReason r);
-
-	void exitApp();
+private:
+	Accounts::Account* account;
+	ExeIndexs::ExeIndex* exeIndex;
 };
-
-#endif // CORE_H
+}
